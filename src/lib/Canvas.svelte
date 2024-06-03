@@ -28,6 +28,7 @@
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
           context.beginPath()
+          // This looks scary but first two params are its x,y position other twi are its width and height
           context.rect(col * cellSize, row * cellSize, cellSize, cellSize);
           context.fillStyle = grid[row][col] ? 'black' : 'white';
           context.fill()
@@ -36,8 +37,8 @@
       }
     }
 
-    // Function to handle canvas click
     const handleCanvasClick = (event: MouseEvent) => {
+      // get info about clicked rectangle
       const rect = canvas.getBoundingClientRect()
     
       // clientX - left gives position from left side
