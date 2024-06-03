@@ -13,7 +13,6 @@
     const rowsLen = Math.floor(height / cellSize);
     const colsLen = Math.floor(width / cellSize);
 
-    // Initialize the grid
     let grid: number[][] = [];
 
     const initializeGrid = () => {
@@ -57,7 +56,36 @@
       drawGrid()
     }
 
+
+    // if alive and has 1 or less neighbour cell dies
+    // if alive and has more than 3 neighbours cell dies
+    // if dead and has 3 neighbours, cell becomes alive
     const advanceGeneration = () => {
+      // initializing a new grid and checking every cell for their neighbours
+      
+      const newGridGeneration: number[][] = [];
+      for (let row = 0; row < rowsLen; row++) {
+        newGridGeneration[row] = [];
+        for (let col = 0; col < colsLen; col++) {
+          const neighbours = countNeighbors(row, col)
+
+          if (grid[row][col] === 1) {
+            if (neighbours < 2 || neighbours > 3)
+              newGridGeneration[row][col] = 0
+            else 
+              newGridGeneration[row][col] = 1
+          } else {
+            if (neighbours === 3)
+              newGridGeneration[row][col] = 1
+            else
+              newGridGeneration[row][col] = 0
+          }
+        }
+      }
+
+      // at the end update the grid with the new generation and draw it again
+      grid = newGridGeneration
+      drawGrid()
 
     }
 
