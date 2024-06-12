@@ -5,18 +5,22 @@
     let canvas: HTMLCanvasElement;
     let context: CanvasRenderingContext2D;    
   
-    let intervalId: number | null = null;
+    let intervalId: number | null = null
 
     // Grid settings
-    const width = 800;
-    const height = 800;
-    const cellSize = 20;
-    const rowsLen = Math.floor(height / cellSize);
-    const colsLen = Math.floor(width / cellSize);
+    const width = window.innerWidth * 0.85;
+    const height = window.innerHeight * 0.85
+    let cellSize = 20
+    let rowsLen = Math.floor(height / cellSize)
+    let colsLen = Math.floor(width / cellSize)
 
     let grid: number[][] = [];
 
     const initializeGrid = () => {
+      //reset
+      // TODO: Make this into a reset function
+      context.clearRect(0, 0, canvas.width, canvas.height)
+
       for (let row = 0; row < rowsLen; row++) {
         grid[row] = [];
         for (let col = 0; col < colsLen; col++) {
@@ -109,40 +113,46 @@
 
     const startGame = () => {
       if (intervalId === null) 
-        intervalId = setInterval(advanceGeneration, 300);
+        intervalId = setInterval(advanceGeneration, 300)
     }
 
     const stopGame = () => {
       if (intervalId !== null) {
-        clearInterval(intervalId);
+        clearInterval(intervalId)
         intervalId = null;
       }
+    }
+
+    const resizeCell = (e: any) => {
+      cellSize = e.target.value
+      rowsLen = Math.floor(height / cellSize)
+      colsLen = Math.floor(width / cellSize)
+      initializeGrid()
+      drawGrid()
     }
 
     onMount(() => {
       context = canvas.getContext('2d') as CanvasRenderingContext2D;
       initializeGrid()
       drawGrid()
-      canvas.addEventListener('click', handleCanvasClick);
+      canvas.addEventListener('click', handleCanvasClick)
     })
 
   </script>
   
   <main>
     <Header />
-
-    <div>
-      <button on:click={startGame}>Start Game</button>
-      <button on:click={stopGame}>Stop Game</button>
-    </div>
   
-    <div class="canvas-container">
-      <canvas bind:this={canvas} width={width} height={height} />
+    <div class="container">
+      <div class="actions-container">
+          <button on:click={startGame}>Start Game</button>
+          <button on:click={stopGame}>Stop Game</button>
+
+          <input type="range" value={cellSize} max={50} min={5} on:change={(e) => resizeCell(e)} />
+      </div>
+      <div class="canvas-container">
+        <canvas bind:this={canvas} width={width} height={height} />
+      </div>
     </div>
   </main>
-  
-
-  <style>
-    @import './app.css';
-  </style>
   
