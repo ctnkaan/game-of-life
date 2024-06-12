@@ -1,5 +1,6 @@
   <script lang="ts">
     import { onMount } from 'svelte';
+	  import Header from './components/Header.svelte';
   
     let canvas: HTMLCanvasElement;
     let context: CanvasRenderingContext2D;    
@@ -128,6 +129,8 @@
   </script>
   
   <main>
+    <Header />
+
     <div>
       <button on:click={startGame}>Start Game</button>
       <button on:click={stopGame}>Stop Game</button>
