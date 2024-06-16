@@ -10,7 +10,8 @@ body {
 .container {
     display: flex;
     justify-content: space-between;
-    gap: 2%;
+    gap: 12px;
+    height: 80vh;
 }
 
 .canvas-container {
@@ -18,18 +19,24 @@ body {
     justify-content: center;
     align-items: center;
     overflow: auto;
+    flex: 1;
+    margin-top: 12px;
 }
 
 .actions-container {
     display: flex;
     flex-direction: column;
     border: 1px solid #ffff;
-    display: flex;
-    width: 10%;
+    width: 15%;
+    margin-top: 12px;
 }
 
+.actions-button {
+    margin: 12px;
+}
 
-
-button {
-    width: 99px;
+.start {
+    background-color: green;
+    border-radius: 3px;
+    border: 2px solid #E8E8E8;
 }

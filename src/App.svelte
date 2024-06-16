@@ -8,19 +8,15 @@
     let intervalId: number | null = null
 
     // Grid settings
-    const width = window.innerWidth * 0.85;
-    const height = window.innerHeight * 0.85
+    let width = window.innerWidth * 0.75
+    let height = window.innerHeight * 0.75
     let cellSize = 20
     let rowsLen = Math.floor(height / cellSize)
     let colsLen = Math.floor(width / cellSize)
 
     let grid: number[][] = [];
 
-    const initializeGrid = () => {
-      //reset
-      // TODO: Make this into a reset function
-      context.clearRect(0, 0, canvas.width, canvas.height)
-
+    const initializeEmptyGrid = () => {
       for (let row = 0; row < rowsLen; row++) {
         grid[row] = [];
         for (let col = 0; col < colsLen; col++) {
@@ -92,7 +88,7 @@
     }
 
     const countNeighbors = (row: number, col: number): number => {
-      let count = 0;
+      let totalNeighbours = 0;
       
       // We are doing -1 and +1 here to check their neighbours
       // ex: row -1 = left side of row
@@ -104,11 +100,11 @@
           const isNeighbourColInBounds = neighborCol >= 0 && neighborCol < colsLen 
           
           if (isNeighbourRowInBounds && isNeighbourColInBounds && isNotProvidedRowOrCol) {
-            count += grid[neighbourRow][neighborCol]
+            totalNeighbours += grid[neighbourRow][neighborCol]
           }
         }
       }
-      return count;
+      return totalNeighbours;
     }
 
     const startGame = () => {
@@ -123,17 +119,36 @@
       }
     }
 
+    const resetGame = () => {
+      context.clearRect(0, 0, canvas.width, canvas.height)
+      initializeEmptyGrid()
+      drawGrid()
+    }
+
     const resizeCell = (e: any) => {
       cellSize = e.target.value
+
+      // doing this so if user scales the window it matches it correctly
+      // BUG: For some reason the first time we set the width and height it renders nothing then when we resize again it renders correctly
+      width = window.innerWidth * 0.75
+      height = window.innerHeight * 0.75
+      
       rowsLen = Math.floor(height / cellSize)
       colsLen = Math.floor(width / cellSize)
-      initializeGrid()
-      drawGrid()
+
+      console.log(rowsLen)
+      console.log(colsLen);
+      
+
+      canvas.width = colsLen * cellSize
+      canvas.height = rowsLen * cellSize
+
+      resetGame()
     }
 
     onMount(() => {
       context = canvas.getContext('2d') as CanvasRenderingContext2D;
-      initializeGrid()
+      initializeEmptyGrid()
       drawGrid()
       canvas.addEventListener('click', handleCanvasClick)
     })
@@ -145,8 +160,9 @@
   
     <div class="container">
       <div class="actions-container">
-          <button on:click={startGame}>Start Game</button>
-          <button on:click={stopGame}>Stop Game</button>
+          <button class="actions-button start" on:click={startGame}>Start Game</button>
+          <button class="actions-button stop" on:click={stopGame}>Stop Game</button>
+          <button class="actions-button reset" on:click={resetGame}>Reset Game</button>
 
           <input type="range" value={cellSize} max={50} min={5} on:change={(e) => resizeCell(e)} />
       </div>
