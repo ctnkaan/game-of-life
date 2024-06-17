@@ -120,13 +120,14 @@
     }
 
     const resetGame = () => {
-      context.clearRect(0, 0, canvas.width, canvas.height)
+      stopGame()
+      context.clearRect(0, 0, width, height)
       initializeEmptyGrid()
       drawGrid()
     }
 
     const resizeCell = (e: any) => {
-      cellSize = e.target.value
+      cellSize = parseInt(e.target.value, 10);
 
       // doing this so if user scales the window it matches it correctly
       // BUG: For some reason the first time we set the width and height it renders nothing then when we resize again it renders correctly
@@ -135,13 +136,6 @@
       
       rowsLen = Math.floor(height / cellSize)
       colsLen = Math.floor(width / cellSize)
-
-      console.log(rowsLen)
-      console.log(colsLen);
-      
-
-      canvas.width = colsLen * cellSize
-      canvas.height = rowsLen * cellSize
 
       resetGame()
     }
@@ -164,7 +158,11 @@
           <button class="actions-button stop" on:click={stopGame}>Stop Game</button>
           <button class="actions-button reset" on:click={resetGame}>Reset Game</button>
 
-          <input type="range" value={cellSize} max={50} min={5} on:change={(e) => resizeCell(e)} />
+          <input type="range" value={cellSize} max={50} min={5} 
+            on:change={(e) => 
+              resizeCell(e) 
+            } 
+          />
       </div>
       <div class="canvas-container">
         <canvas bind:this={canvas} width={width} height={height} />

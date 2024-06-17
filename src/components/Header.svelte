@@ -31,6 +31,10 @@
         margin-bottom: 1rem;
     }
 
+    a {
+        color: #ffff;
+    }
+
     a:visited {
         color: #ffff;
     }
